@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:kamchedal/page2.dart';
 
 void main() => runApp(Kamchedal());
 
@@ -13,8 +14,7 @@ class Kamchedal extends StatelessWidget{
       title: 'КамчЕДАл Отзывы',
       theme: ThemeData(
           primaryColor: Colors.lightGreen,
-          textTheme: TextTheme(title: TextStyle(color: Colors.white))
-        ),
+          textTheme: TextTheme(title: TextStyle(color: Colors.white))),
       home: Scaffold(
         backgroundColor: GFColors.DARK,
         appBar: AppBar(
@@ -22,29 +22,28 @@ class Kamchedal extends StatelessWidget{
     
         ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+         mainAxisAlignment: MainAxisAlignment.center, 
   
         children: <Widget>[
-      GFImageOverlay(
+
+//Лого
+GFImageOverlay(
    height: 180,
    width: 180,
    shape: BoxShape.circle,
    image:AssetImage('assets/kamlogo.png'),
  ),
- //Container(
-  	//padding: EdgeInsets.all(20.0),
-    //child: GFListTile(
-  
-  //titleText:'Нам важно Ваше мнение',
-  //subtitleText:'Пожалуйста оцените данное заведение нажав соответственную звёздочку и ниже оставьте свой отзыв',
-  //color: Colors.white,
-//), ),
+
+//Текст
  Container(
   	padding: EdgeInsets.all(20.0),
     child: Text('Пожалуйста оцените данное заведение нажав соответственную звёздочку и ниже оставьте свой отзыв. Мы работаем, над усовершенствованием сервиса обслуживания в нашем крае, ваши отзывы, предложения и замечания не останутся без внимания!',
-    style: TextStyle( // а у текста появился виджет, который его стилизует
-            color: Colors.white, // задаем ему цвет текста
+    style: TextStyle(
+            color: Colors.white, 
             fontSize: 16.0,),),),
 
+//Звёзды 
  Container(
 
 	width: 320,
@@ -60,8 +59,7 @@ class Kamchedal extends StatelessWidget{
   },
 ),),
 
-
-
+//Филд Ваше Имя
  Container(
 	width: 320,
 	padding: EdgeInsets.all(10.0),
@@ -83,6 +81,7 @@ class Kamchedal extends StatelessWidget{
 	  ),
 	),),),
  
+ //Филд ваш телефон
   Container(
 	width: 320,
 	padding: EdgeInsets.all(10.0),
@@ -104,6 +103,8 @@ class Kamchedal extends StatelessWidget{
 	  ),
 	),),),
 
+
+//Филд Ваш отзыв
    Container(
 	width: 320,
 	padding: EdgeInsets.all(10.0),
@@ -125,14 +126,20 @@ class Kamchedal extends StatelessWidget{
 	  ),
 	),),),
 
-  //   double _rating = 3; где объявить?
+  //Кнопка отправить
    Container(
 	width: 320,
 	padding: EdgeInsets.all(10.0),
-	child: GFButton(
-    onPressed: null,
-    color: Color(0x00FF00),
+	child:
+  GFButton(
+   onPressed: null,
+   //=>
+    //Navigator.push(context, MaterialPageRoute(builder: (context) =>
+    //Page2())), 
+    // Ошибка при переходе на Page2, также при включении кода навигатор пуш, пропадает зелёная заливка кнопки
+  
     text: "ОТПРАВИТЬ",
+      color: Color(0x00FF00),
  ),)
 
       ], 
