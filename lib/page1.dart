@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:kamchedal/page2.dart';
 
-double _rating = 3;
+double _rating = 0;
 
 class Page1 extends StatefulWidget {
   @override
@@ -12,6 +12,8 @@ class Page1 extends StatefulWidget {
 
 class _Page1State extends State<Page1> {
   String review = '';
+  String phone = '';
+  String name = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +54,9 @@ class _Page1State extends State<Page1> {
                 child: GFRating(
                   value: _rating,
                   onChanged: (value) {
-                    //setState(() {
-                    //  _rating = value;
-                    // });
+                    setState(() {
+                      _rating = value;
+                   });
                   },
                 ),
               ),
@@ -65,6 +67,9 @@ class _Page1State extends State<Page1> {
                 padding: EdgeInsets.all(10.0),
                 child: TextField(
                   autocorrect: true,
+                  onChanged: (text) {
+                    name = text;
+                  },
                   decoration: InputDecoration(
                     hintText: 'Введите Ваше Имя',
                     prefixIcon: Icon(Icons.person),
@@ -89,6 +94,9 @@ class _Page1State extends State<Page1> {
                 padding: EdgeInsets.all(10.0),
                 child: TextField(
                   autocorrect: true,
+                  onChanged: (text) {
+                    phone = text;
+                  },
                   decoration: InputDecoration(
                     hintText: 'Введите Ваш Телефон',
                     prefixIcon: Icon(Icons.phone),
@@ -141,11 +149,12 @@ class _Page1State extends State<Page1> {
                 child: GFButton(
                   onPressed: () async {
                     print(review);
-                
-                   await  Firestore.instance.runTransaction((t){
-                      return t.set(Firestore.instance.document('reviews/1'), {'review': review});
+
+                    await Firestore.instance.runTransaction((t) {
+                      return t.set(Firestore.instance.document('reviews/1'),
+                          {'review': review, 'phone': phone, 'name': name, 'rating': _rating});
                     });
-                   
+
                     return Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Page2()));
                   },

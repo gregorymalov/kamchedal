@@ -33,7 +33,7 @@ class Page2 extends StatelessWidget {
                 child: Text.rich(
                   TextSpan(
                       text: 'Спасибо ',
-                      children: [WidgetSpan(child: Icon(Icons.star, color: Colors.red,))]),
+                      children: [WidgetSpan(child: Icon(Icons.favorite, color: Colors.red,))]),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,
