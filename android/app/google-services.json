@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "635616031813",
+    "firebase_url": "https://kamchedal-9c735.firebaseio.com",
+    "project_id": "kamchedal-9c735",
+    "storage_bucket": "kamchedal-9c735.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635616031813:android:7c4503f2ec3183ae501f2c",
+        "android_client_info": {
+          "package_name": "com.example.kamchedal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635616031813-5p0jjco6u0v96qnuot2cuj25qmtjss9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvomTPPSIDd7viOOWmIWXv_a-9S7fzxBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635616031813-5p0jjco6u0v96qnuot2cuj25qmtjss9i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "635616031813-ths67q11lrfqc111l9bmp81tu129u1pv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kamchedal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
