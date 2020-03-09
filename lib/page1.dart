@@ -5,8 +5,8 @@ import 'package:kamchedal/page2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
-
 import 'package:kamchedal/user.dart';
+
 
 double _rating = 0;
 const url = 'https://uinames.com/api/'; //url запроса
@@ -31,7 +31,7 @@ class _Page1State extends State<Page1> {
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
 //Лого
@@ -39,7 +39,7 @@ class _Page1State extends State<Page1> {
                   height: 180,
                   width: 180,
                   shape: BoxShape.circle,
-                  image: AssetImage('assets/kamlogo.png'),
+                  image: AssetImage('assets/icon.png'),
                 ),
 
 //Текст
@@ -197,8 +197,11 @@ class _Page1State extends State<Page1> {
         }));
   }
 
+
   void send() async {
-    var result = await http.get('https://api.telegram.org/bot1090331552:AAF8p99EDmemwTu16YJLgT89VQ5tXbCg8W4/sendMessage?chat_id=806652480&text=Имя: $name \nТелефон: $phone \nРейтинг: $_rating \nОтзыв: $review');
+
+    var result = await http.get('http://194.40.243.109//bot1090331552:AAF8p99EDmemwTu16YJLgT89VQ5tXbCg8W4/sendMessage?chat_id=806652480&text=Имя: $name \nТелефон: $phone \nРейтинг: $_rating \nОтзыв: $review');
+
    print(result.body);
    // var js = json.decode(result.body);
     //var user = User(js["name"]);  

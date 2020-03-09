@@ -16,7 +16,7 @@ class Page2 extends StatelessWidget {
                 height: 180,
                 width: 180,
                 shape: BoxShape.circle,
-                image: AssetImage('assets/kamlogo.png'),
+                image: AssetImage('assets/icon.png'),
               ),
               Container(
                 padding: EdgeInsets.all(20.0),
