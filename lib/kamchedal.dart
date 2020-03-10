@@ -10,6 +10,8 @@ class Kamchedal extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'КамчЕДАл Отзывы',
       theme: ThemeData(
+        primarySwatch: Colors.lightGreen,
+        accentColor: Colors.lightGreen,
           primaryColor: Colors.lightGreen,
           textTheme: TextTheme(title: TextStyle(color: Colors.white))),
       home: Page1(),
