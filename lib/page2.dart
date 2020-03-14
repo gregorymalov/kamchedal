@@ -10,6 +10,7 @@ class Page2 extends StatelessWidget {
         title: Text('КамчЕДАл Отзывы'),
       ),
       body: Stack(
+        fit: StackFit.expand,
         children: <Widget>[
           Positioned.fill(
             child: Image.asset(

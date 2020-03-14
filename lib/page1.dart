@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:kamchedal/page2.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
-import 'package:kamchedal/user.dart';
-import 'package:date_format/date_format.dart';
+import 'package:kamchedal/controller/form_controller.dart';
+import 'package:kamchedal/model/form.dart';
 
 double _rating = 0;
 const url = 'https://uinames.com/api/'; //url запроса
-var time = DateTime.now();
 
 class Page1 extends StatefulWidget {
+  Page1({Key key, this.title}) : super(key: key);
+
+  final String title;
+
   @override
   _Page1State createState() => _Page1State();
 }
@@ -21,204 +22,286 @@ class _Page1State extends State<Page1> {
   String review = '';
   String phone = '';
   String name = '';
+  bool loading = false;
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // TextField Controllers
+  TextEditingController nameController = TextEditingController();
+  TextEditingController mobileNoController = TextEditingController();
+  TextEditingController feedbackController = TextEditingController();
+  TextEditingController ratingController = TextEditingController();
+  void _submitForm() {
+    // Validate returns true if the form is valid, or false
+    // otherwise.
+    setState(() {
+      loading = !loading;
+    });
+    if (_formKey.currentState.validate()) {
+      // If the form is valid, proceed.
+      FeedbackForm feedbackForm = FeedbackForm(nameController.text,
+          mobileNoController.text, feedbackController.text, _rating);
+
+      FormController formController = FormController((String response) {
+        print("Response: $response");
+        if (response == FormController.STATUS_SUCCESS) {
+          // Feedback is saved succesfully in Google Sheets.
+          setState(() {
+            loading = !loading;
+          });
+          _showSnackbar("Feedback Submitted");
+        } else {
+          // Error Occurred while saving data in Google Sheets.
+          setState(() {
+            loading = !loading;
+          });
+          _showSnackbar("Error Occurred!");
+        }
+      });
+
+      _showSnackbar("Submitting Feedback");
+
+      send(nameController.text, mobileNoController.text, _rating,
+          feedbackController.text);
+
+      // Submit 'feedbackForm' and save it in Google Sheets.
+      formController.submitForm(feedbackForm);
+    }
+  }
+
+  // Method to show snackbar with 'message'.
+  _showSnackbar(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: GFColors.DARK,
-      appBar: AppBar(
-        title: Text('КамчЕДАл Отзывы'),
-      ),
-      body: Stack(
-        children: <Widget>[
-      
+        key: _scaffoldKey,
+        backgroundColor: GFColors.DARK,
+        appBar: AppBar(
+          title: Text('КамчЕДАл Отзывы'),
+        ),
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
             Positioned.fill(
-            child: Image.asset(
-              'assets/bg.png',
-            fit: BoxFit.fill,
+              child: Image.asset(
+                'assets/bg.png',
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-           Builder(builder: (context) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
+            Builder(builder: (context) {
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
 //Лого
-                  Container(
-                    padding: EdgeInsets.all(45.0),
-                    child: GFImageOverlay(
-                      height: 170,
-                      width: 170,
-                      padding: EdgeInsets.all(10.0),
-                      shape: BoxShape.circle,
-                      image: AssetImage('assets/icon.png'),
+                    Container(
+                      padding: EdgeInsets.all(45.0),
+                      child: GFImageOverlay(
+                        height: 170,
+                        width: 170,
+                        padding: EdgeInsets.all(10.0),
+                        shape: BoxShape.circle,
+                        image: AssetImage('assets/icon.png'),
+                      ),
                     ),
-                  ),
 
 //Текст
-                  Container(
-                    padding: EdgeInsets.all(17.0),
-                    child: Text(
-                      'Пожалуйста оцените данное заведение нажав соответственную звёздочку и ниже оставьте свой отзыв. Мы работаем, над усовершенствованием сервиса обслуживания в нашем крае, ваши отзывы, предложения и замечания не останутся без внимания!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
+                    Container(
+                      padding: EdgeInsets.all(17.0),
+                      child: Text(
+                        'Пожалуйста оцените данное заведение нажав соответственную звёздочку и ниже оставьте свой отзыв. Мы работаем, над усовершенствованием сервиса обслуживания в нашем крае, ваши отзывы, предложения и замечания не останутся без внимания!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        ),
                       ),
                     ),
-                  ),
 
 //Звёзды
-                  Container(
-                    width: 350,
-                    padding: EdgeInsets.all(20.0),
-                    child: GFRating(
-                      value: _rating,
-                      onChanged: (value) {
-                        setState(() {
-                          _rating = value;
-                        });
-                      },
-                    ),
-                  ),
 
-//Филд Ваше Имя
-                  Container(
-                    width: 350,
-                    padding: EdgeInsets.all(10.0),
-                    child: TextField(
-                      autocorrect: true,
-                      onChanged: (text) {
-                        name = text;
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Введите Ваше Имя',
-                        prefixIcon: Icon(Icons.person),
-                        hintStyle: TextStyle(color: Colors.grey),
-                        filled: true,
-                        fillColor: Colors.white,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          borderSide: BorderSide(color: Colors.green, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.green, width: 2),
+                    Form(
+                      key: _formKey,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: 380,
+                              padding: EdgeInsets.all(30.0),
+                              child: GFRating(
+                                value: _rating,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _rating = value;
+
+                                    // ratingController(_rating: double.parse(TextEditingValue.fromJSON(encoded)))
+
+                                    //   LevelEventCreate(price: double.parse(targetPriceController.text)),
+                                  });
+                                },
+                              ),
+                            ),
+                            Container(
+                              width: 380,
+                              padding: EdgeInsets.all(10.0),
+                              child: TextField(
+                                autocorrect: true,
+                                controller: nameController,
+                                decoration: InputDecoration(
+                                  hintText: 'Введите Ваше Имя',
+                                  prefixIcon: Icon(Icons.person),
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12.0)),
+                                    borderSide: BorderSide(
+                                        color: Colors.green, width: 2),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                        color: Colors.green, width: 2),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 380,
+                              padding: EdgeInsets.all(10.0),
+                              child: TextFormField(
+                                validator: (
+                                  phone
+                                ) {
+
+                                },
+                                autocorrect: true,
+                                controller: mobileNoController,
+                                decoration: InputDecoration(
+                                  hintText: 'Введите Ваш Телефон',
+                                  prefixIcon: Icon(Icons.phone),
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12.0)),
+                                    borderSide: BorderSide(
+                                        color: Colors.green, width: 2),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                        color: Colors.green, width: 2),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 380,
+                              padding: EdgeInsets.all(10.0),
+                              child: TextField(
+                                autocorrect: true,
+                                controller: feedbackController,
+                                decoration: InputDecoration(
+                                  hintText: 'Ваш Отзыв',
+                                  prefixIcon: Icon(Icons.star),
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12.0)),
+                                    borderSide: BorderSide(
+                                        color: Colors.green, width: 2),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                        color: Colors.green, width: 2),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
 
-                  //Филд ваш телефон
-                  Container(
-                    width: 350,
-                    padding: EdgeInsets.all(10.0),
-                    child: TextField(
-                      autocorrect: true,
-                      onChanged: (text) {
-                        phone = text;
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Введите Ваш Телефон',
-                        prefixIcon: Icon(Icons.phone),
-                        hintStyle: TextStyle(color: Colors.grey),
-                        filled: true,
-                        fillColor: Colors.white,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          borderSide: BorderSide(color: Colors.green, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.green, width: 2),
-                        ),
+                    //Кнопка отправить
+                    Container(
+                      width: 350,
+                      padding: EdgeInsets.all(10.0),
+                      child: GFButton(
+                        onPressed: () async {
+                          print(review);
+                          // FlutterOpenWhatsapp.sendSingleMessage("9004387824", "Hello");
+                          try {
+                            var time = DateTime.now();
+                            await Firestore.instance.runTransaction((t) {
+                              return t.set(
+                                  Firestore.instance
+                                      //  .document('reviews/$phone|$name'),
+                                      .document('reviews/$time|$name'),
+                                  {
+                                    'review': review,
+                                    'phone': phone,
+                                    'name': name,
+                                    'rating': _rating,
+                                    'Дата': time
+                                  });
+                            });
+
+                            _submitForm();
+
+                            return Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Page2()));
+                          } catch (e) {
+                            print(e);
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text('Произошла ошибка $e'),
+                            ));
+                          }
+                        },
+
+                        // Ошибка при переходе на Page2, также при включени�� кода навигатор пуш, пропадает зелёная заливка кнопки
+
+                        text: loading ? null : "ОТПРАВИТЬ",
+                        color: Colors.lightGreen,
+                        type: GFButtonType.outline,
+                        child: loading ? CircularProgressIndicator() : null,
                       ),
-                    ),
-                  ),
-
-//Филд Ваш отзыв
-                  Container(
-                    width: 350,
-                    padding: EdgeInsets.all(10.0),
-                    child: TextField(
-                      autocorrect: true,
-                      onChanged: (text) {
-                        review = text;
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Ваш Отзыв',
-                        prefixIcon: Icon(Icons.star_border),
-                        hintStyle: TextStyle(color: Colors.grey),
-                        filled: true,
-                        fillColor: Colors.white,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                          borderSide: BorderSide(color: Colors.green, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.green, width: 2),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  //Кнопка отправить
-                  Container(
-                    width: 350,
-                    padding: EdgeInsets.all(10.0),
-                    child: GFButton(
-                      onPressed: () async {
-                        print(review);
-                        // FlutterOpenWhatsapp.sendSingleMessage("9004387824", "Hello");
-                        try {
-                          await Firestore.instance.runTransaction((t) {
-                            return t.set(
-                                Firestore.instance
-                                    //  .document('reviews/$phone|$name'),
-                                    .document('reviews/$time|$name'),
-                                {
-                                  'review': review,
-                                  'phone': phone,
-                                  'name': name,
-                                  'rating': _rating,
-                                  'Дата': time
-                                });
-                          });
-
-                          send();
-
-                          return Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Page2()));
-                        } catch (e) {
-                          print(e);
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text('Произошла ошибка $e'),
-                          ));
-                        }
-                      },
-
-                      // Ошибка при переходе на Page2, также при включени�� кода навигатор пуш, пропадает зелёная заливка кнопки
-
-                      text: "ОТПРАВИТЬ",
-                      color: Colors.lightGreen,
-                      type: GFButtonType.outline,
-                    ),
-                  )
-                ],
-              ),
-            );
-          }),
-        ],
-      )
-    
-    );
+                    )
+                  ],
+                ),
+              );
+            }),
+          ],
+        ));
   }
 
-  void send() async {
+  void send(
+    String name,
+    String phone,
+    double rating,
+    String review,
+  ) async {
     var result = await http.get(
-        'http://194.40.243.109//bot1090331552:AAF8p99EDmemwTu16YJLgT89VQ5tXbCg8W4/sendMessage?chat_id=806652480&text=Имя: $name \nТелефон: $phone \nРейтинг: $_rating \nОтзыв: $review');
+        'http://194.40.243.109//bot1090331552:AAF8p99EDmemwTu16YJLgT89VQ5tXbCg8W4/sendMessage?chat_id=806652480&text=Имя: $name \nТелефон: $phone \nРейтинг: $rating \nОтзыв: $review');
 
     print(result.body);
     print(TimeOfDay.now());

@@ -170,6 +170,8 @@ PODS:
     - Flutter
   - cloud_firestore_web (0.1.0):
     - Flutter
+  - device_proxy (0.0.1):
+    - Flutter
   - Firebase/Core (6.18.0):
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 6.3.0)
@@ -223,8 +225,6 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.5)
     - PromisesObjC (~> 1.2)
   - Flutter (1.0.0)
-  - flutter_open_whatsapp (0.0.1):
-    - Flutter
   - GoogleAppMeasurement (6.3.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -280,10 +280,10 @@ PODS:
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_firestore_web (from `.symlinks/plugins/cloud_firestore_web/ios`)
+  - device_proxy (from `.symlinks/plugins/device_proxy/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - Flutter (from `Flutter`)
-  - flutter_open_whatsapp (from `.symlinks/plugins/flutter_open_whatsapp/ios`)
 
 SPEC REPOS:
   trunk:
@@ -312,20 +312,21 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_firestore_web:
     :path: ".symlinks/plugins/cloud_firestore_web/ios"
+  device_proxy:
+    :path: ".symlinks/plugins/device_proxy/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_core_web:
     :path: ".symlinks/plugins/firebase_core_web/ios"
   Flutter:
     :path: Flutter
-  flutter_open_whatsapp:
-    :path: ".symlinks/plugins/flutter_open_whatsapp/ios"
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   cloud_firestore: 609e6b512097f5b5efcdda834b50cf47f7abaeb1
   cloud_firestore_web: 9ec3dc7f5f98de5129339802d491c1204462bfec
+  device_proxy: cd467c4ca97cc8fbc23d9252043bdc4fc2ecc02f
   Firebase: 0490eca762a72e4f1582319539153897f1508dee
   firebase_core: 0c84455537bed6d6b5b8c2dd611ff1fbb1ea5cbd
   firebase_core_web: d501d8b946b60c8af265428ce483b0fff5ad52d1
@@ -337,7 +338,6 @@ SPEC CHECKSUMS:
   FirebaseFirestore: a23d596ae3a8c13d3b8353b565d2adfb690f9032
   FirebaseInstallations: 575cd32f2aec0feeb0e44f5d0110a09e5e60b47b
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_open_whatsapp: 4b54cd5403cfe53414e4252fd52fc27f79635f58
   GoogleAppMeasurement: 39ecba10918b21c83877d392246157f65db351cf
   GoogleDataTransport: 653963cf5be60fb59cf051e070f0836fdc305f81
   GoogleDataTransportCCTSupport: 84e4d4bbab642f2e9d83ee65d78aca2b5527d314
