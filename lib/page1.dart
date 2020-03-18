@@ -128,19 +128,65 @@ class _Page1State extends State<Page1> {
                     ),
 
 //Текст
-                    Container(
-                      width: 580,
-                      padding: EdgeInsets.all(5.0),
-                      child: GFListTile(
-                        color: Colors.white70,
-                        //avatar: GFAvatar(),
-                        titleText:
-                            'Помогите держать уровень сервиса в заведениях нашего Края на высоте!',
-                        subtitleText:
-                            'Отметьте, насколько вы довольны посещением этого места, и оставьте отзыв. Руководство (кафе/ресторана) прочитает его. Пишите, и вы напрямую повлияете на качество кухни и обслуживания здесь!',
+Container(
+    constraints:  BoxConstraints(minHeight: 100),
+        padding:  EdgeInsets.all(1.0),
+        margin: EdgeInsets.all(10.0),
+        // margin: padding,
+        decoration: BoxDecoration(
+          color: Colors.white70,
+          borderRadius:  BorderRadius.all(Radius.circular(10)),
+          
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+         
+            Expanded(
+              child: Padding(
+                padding:  EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                   Text('Помогите держать уровень сервиса в заведениях нашего Края на высоте!',
+                             textAlign: TextAlign.center, 
+                            
+                            style: TextStyle(
+                      
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: GFColors.DARK),
+                          ),
+                      Text( 'Отметьте, насколько вы довольны посещением этого места, и оставьте отзыв. Руководство (кафе/ресторана) прочитает его. Пишите, и вы напрямую повлияете на качество кухни и обслуживания здесь!',
+                             textAlign: TextAlign.center,
+                          
+                            style: TextStyle(
+                              fontSize: 14.5,
+                              color: Colors.black87,
+                            ),
+                          ),
+                
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+),
+                  //  Container(
+                  //    width: 580,
+                   //   padding: EdgeInsets.all(5.0),
+                   //   child: GFListTile(
+                   //     color: Colors.white70,
+                        
+                  //      //avatar: GFAvatar(),
+                   //     titleText:
+                    //        'Помогите держать уровень сервиса в заведениях нашего Края на высоте!',
+                  //      subtitleText:
+                   //         'Отметьте, насколько вы довольны посещением этого места, и оставьте отзыв. Руководство (кафе/ресторана) прочитает его. Пишите, и вы напрямую повлияете на качество кухни и обслуживания здесь!',
                         //icon: Icon(Icons.favorite)
-                      ),
-                    ),
+                  //    ),
+                //    ),
 
 //Звёзды
 
