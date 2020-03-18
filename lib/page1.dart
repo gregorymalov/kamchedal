@@ -7,6 +7,7 @@ import 'package:kamchedal/controller/form_controller.dart';
 import 'package:kamchedal/model/form.dart';
 
 double _rating = 0;
+double _rating2 = 0;
 const url = 'https://uinames.com/api/'; //url запроса
 
 class Page1 extends StatefulWidget {
@@ -22,6 +23,7 @@ class _Page1State extends State<Page1> {
   String review = '';
   String phone = '';
   String name = '';
+  String waiter = '';
   bool loading = false;
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -30,8 +32,10 @@ class _Page1State extends State<Page1> {
   TextEditingController nameController = TextEditingController();
   TextEditingController mobileNoController = TextEditingController();
   TextEditingController feedbackController = TextEditingController();
+  TextEditingController waiternameController = TextEditingController();
   TextEditingController ratingController = TextEditingController();
   void _submitForm() {
+      var date = DateTime.now();
     // Validate returns true if the form is valid, or false
     // otherwise.
     setState(() {
@@ -39,8 +43,14 @@ class _Page1State extends State<Page1> {
     });
     if (_formKey.currentState.validate()) {
       // If the form is valid, proceed.
-      FeedbackForm feedbackForm = FeedbackForm(nameController.text,
-          mobileNoController.text, feedbackController.text, _rating);
+      FeedbackForm feedbackForm = FeedbackForm(
+          nameController.text,
+          mobileNoController.text,
+          feedbackController.text,
+          waiternameController.text,
+          _rating,
+          _rating2,
+          date.toString() );
 
       FormController formController = FormController((String response) {
         print("Response: $response");
@@ -61,8 +71,14 @@ class _Page1State extends State<Page1> {
 
       _showSnackbar("Submitting Feedback");
 
-      send(nameController.text, mobileNoController.text, _rating,
-          feedbackController.text);
+      send(
+          nameController.text,
+          mobileNoController.text,
+          waiternameController.text,
+          _rating,
+          _rating2,
+          feedbackController.text
+         );
 
       // Submit 'feedbackForm' and save it in Google Sheets.
       formController.submitForm(feedbackForm);
@@ -101,10 +117,10 @@ class _Page1State extends State<Page1> {
                   children: <Widget>[
 //Лого
                     Container(
-                      padding: EdgeInsets.all(45.0),
+                      padding: EdgeInsets.all(20.0),
                       child: GFImageOverlay(
-                        height: 170,
-                        width: 170,
+                        height: 160,
+                        width: 160,
                         padding: EdgeInsets.all(10.0),
                         shape: BoxShape.circle,
                         image: AssetImage('assets/icon.png'),
@@ -113,14 +129,16 @@ class _Page1State extends State<Page1> {
 
 //Текст
                     Container(
-                      padding: EdgeInsets.all(17.0),
-                      child: Text(
-                        'Пожалуйста оцените данное заведение нажав соответственную звёздочку и ниже оставьте свой отзыв. Мы работаем, над усовершенствованием сервиса обслуживания в нашем крае, ваши отзывы, предложения и замечания не останутся без внимания!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                        ),
+                      width: 580,
+                      padding: EdgeInsets.all(5.0),
+                      child: GFListTile(
+                        color: Colors.white70,
+                        //avatar: GFAvatar(),
+                        titleText:
+                            'Помогите держать уровень сервиса в заведениях нашего Края на высоте!',
+                        subtitleText:
+                            'Отметьте, насколько вы довольны посещением этого места, и оставьте отзыв. Руководство (кафе/ресторана) прочитает его. Пишите, и вы напрямую повлияете на качество кухни и обслуживания здесь!',
+                        //icon: Icon(Icons.favorite)
                       ),
                     ),
 
@@ -129,18 +147,58 @@ class _Page1State extends State<Page1> {
                     Form(
                       key: _formKey,
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: EdgeInsets.all(5.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
                               width: 380,
-                              padding: EdgeInsets.all(30.0),
+                              padding: EdgeInsets.all(1.0),
+                              child: Text(
+                                'Оцените работу официанта',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 380,
+                              padding: EdgeInsets.all(1.0),
                               child: GFRating(
                                 value: _rating,
                                 onChanged: (value) {
                                   setState(() {
                                     _rating = value;
+
+                                    // ratingController(_rating: double.parse(TextEditingValue.fromJSON(encoded)))
+
+                                    //   LevelEventCreate(price: double.parse(targetPriceController.text)),
+                                  });
+                                },
+                              ),
+                            ),
+                            Container(
+                              width: 380,
+                              padding: EdgeInsets.all(1.0),
+                              child: Text(
+                                'Насколько вам понравились блюда',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 380,
+                              padding: EdgeInsets.all(1.0),
+                              child: GFRating(
+                                value: _rating2,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _rating2 = value;
 
                                     // ratingController(_rating: double.parse(TextEditingValue.fromJSON(encoded)))
 
@@ -180,16 +238,40 @@ class _Page1State extends State<Page1> {
                               width: 380,
                               padding: EdgeInsets.all(10.0),
                               child: TextFormField(
-                                validator: (
-                                  phone
-                                ) {
-
-                                },
+                              //  validator: (phone) {},
                                 autocorrect: true,
                                 controller: mobileNoController,
                                 decoration: InputDecoration(
                                   hintText: 'Введите Ваш Телефон',
                                   prefixIcon: Icon(Icons.phone),
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12.0)),
+                                    borderSide: BorderSide(
+                                        color: Colors.green, width: 2),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                        color: Colors.green, width: 2),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 380,
+                              padding: EdgeInsets.all(10.0),
+                              child: TextFormField(
+                              //  validator: (phone) {},
+                                autocorrect: true,
+                                controller: waiternameController,
+                                decoration: InputDecoration(
+                                  hintText: 'Имя Официанта',
+                                  prefixIcon: Icon(Icons.person_pin_circle),
                                   hintStyle: TextStyle(color: Colors.grey),
                                   filled: true,
                                   fillColor: Colors.white,
@@ -259,7 +341,8 @@ class _Page1State extends State<Page1> {
                                     'review': review,
                                     'phone': phone,
                                     'name': name,
-                                    'rating': _rating,
+                                    'rating_waiter': _rating,
+                                    'rating_ eat': _rating2,
                                     'Дата': time
                                   });
                             });
@@ -281,7 +364,7 @@ class _Page1State extends State<Page1> {
                         // Ошибка при переходе на Page2, также при включени�� кода навигатор пуш, пропадает зелёная заливка кнопки
 
                         text: loading ? null : "ОТПРАВИТЬ",
-                        color: Colors.lightGreen,
+                        color: Colors.green,
                         type: GFButtonType.outline,
                         child: loading ? CircularProgressIndicator() : null,
                       ),
@@ -297,11 +380,13 @@ class _Page1State extends State<Page1> {
   void send(
     String name,
     String phone,
+    String waiter,
     double rating,
+    double rating2,
     String review,
   ) async {
     var result = await http.get(
-        'http://194.40.243.109//bot1090331552:AAF8p99EDmemwTu16YJLgT89VQ5tXbCg8W4/sendMessage?chat_id=806652480&text=Имя: $name \nТелефон: $phone \nРейтинг: $rating \nОтзыв: $review');
+        'http://194.40.243.109//bot1090331552:AAF8p99EDmemwTu16YJLgT89VQ5tXbCg8W4/sendMessage?chat_id=806652480&text=Имя: $name \nТелефон: $phone \nИмя официанта: $waiter \nОценка официанта: $rating \nОценка блюд: $rating2 \nОтзыв: $review');
 
     print(result.body);
     print(TimeOfDay.now());

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:kamchedal/page1.dart';
-import 'package:kamchedal/page2.dart';
 
 class Kamchedal extends StatelessWidget {
   @override
@@ -10,9 +8,9 @@ class Kamchedal extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'КамчЕДАл Отзывы',
       theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
-        accentColor: Colors.lightGreen,
-          primaryColor: Colors.lightGreen,
+        primarySwatch: Colors.green,
+        accentColor: Colors.green,
+          primaryColor: Colors.green,
           textTheme: TextTheme(title: TextStyle(color: Colors.white))),
       home: Page1(),
     );

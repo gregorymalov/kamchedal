@@ -20,26 +20,34 @@ class Page2 extends StatelessWidget {
           ),
           SingleChildScrollView(
             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                GFImageOverlay(
-                  height: 180,
-                  width: 180,
-                  shape: BoxShape.circle,
-                  image: AssetImage('assets/icon.png'),
-                ),
                 Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text(
-                    'Наше заведение принимает чаевые через Сбербанк Онлайн! Откройте приложение Сбербанк Онлайн на вашем смартфоне и в разделе платежи выберите \"Оплата через QR\", отсканируйте QR и введите произвольную сумму. ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                    ),
+                  child: GFImageOverlay(
+                    height: 160,
+                    width: 160,
+                    padding: EdgeInsets.all(20.0),
+                    shape: BoxShape.circle,
+                    image: AssetImage('assets/icon.png'),
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(20.0),
+                      width: 580,
+                      padding: EdgeInsets.all(20.0),
+                      child: GFListTile(
+                        color: Colors.white70,
+                        //avatar: GFAvatar(),
+                        titleText:
+                            'У нас Вы можете оставить чаевые через Сбербанк Онлайн!',
+                        subtitleText:
+                            'Если Вам удобно отблагодарить персонал безналичным переводом, откройте Сбербанк Онлайн на смартфоне и в разделе "Платежи" выберите "Оплата через QR, отсканируйте код ниже и введите сумму чаевых. 😉',
+                        //icon: Icon(Icons.favorite)
+                      ),
+                    ),
+                Container(
+                  padding: EdgeInsets.all(30.0),
                   child: Text.rich(
                     TextSpan(text: 'Спасибо ', children: [
                       WidgetSpan(
