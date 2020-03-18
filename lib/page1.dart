@@ -5,6 +5,7 @@ import 'package:kamchedal/page2.dart';
 import 'package:http/http.dart' as http;
 import 'package:kamchedal/controller/form_controller.dart';
 import 'package:kamchedal/model/form.dart';
+import 'package:kamchedal/policy.dart';
 
 double _rating = 0;
 double _rating2 = 0;
@@ -284,7 +285,12 @@ Container(
                               width: 380,
                               padding: EdgeInsets.all(10.0),
                               child: TextFormField(
-                              //  validator: (phone) {},
+                              validator: (mobileNoController) {
+                                 if (mobileNoController != 10)
+      return 'Mobile Number must be of 10 digit';
+    else
+      return null;
+                              },
                                 autocorrect: true,
                                 controller: mobileNoController,
                                 decoration: InputDecoration(
@@ -411,10 +417,32 @@ Container(
 
                         text: loading ? null : "ОТПРАВИТЬ",
                         color: Colors.green,
-                        type: GFButtonType.outline,
+                        //type: GFButtonType.outline,
                         child: loading ? CircularProgressIndicator() : null,
                       ),
-                    )
+                    ),
+
+                   Container(
+                     child: GFButton(
+                          onPressed: () async {
+                            print(review);
+                            
+                              return Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Policy()));
+                 
+                            },
+                                  
+
+                        text: "Политика Конфидинциальности",
+                        color: Colors.green,
+                        size:  GFSize.SMALL,
+                        type: GFButtonType.outline,
+      
+                      ),
+                    ),
+                            
                   ],
                 ),
               );
